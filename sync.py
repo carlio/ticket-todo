@@ -21,8 +21,10 @@ class BitBucketAdaptor(object):
     def from_status(self, status):
         if status == 'resolved':
             return 'complete'
-        if status == 'new':
+        elif status == 'new':
             return 'pending'
+        elif status == 'open':
+            return 'in progress'
         # TODO: handle all returned values
         raise ValueError(status)
 
@@ -34,6 +36,16 @@ class BitBucketAdaptor(object):
             to_ret[issue['local_id']] = {'title': issue['title'],
                                          'status': self.from_status(issue['status'])}
         return to_ret
+
+    def create_issue(self, title, status):
+        if status == 'complete':
+            status = 'resolved'
+        elif status == 'pending':
+            status = 'new'
+        elif status == 'in progress':
+            status = 'open'
+        data = Issue(self.bitbucket).create(title=title, status=status)[1]
+        return data['local_id']
 
 
 class GitHubAdaptor(object):
@@ -93,7 +105,7 @@ def sync(*args):
 
     remote_issues = api.get_issues()
 
-    with open(filename) as f:
+    with open(filepath) as f:
         file_content = f.readlines()
 
     new_file_content = []
@@ -110,7 +122,21 @@ def sync(*args):
                     break
             else:
                 # this wasn't found remotely... so create it!
-                pass
+                number = api.create_issue(title, status)
+                new_line = '%s %s (%s)' % (symbol_for(status), title, number)
+        else:
+            # we already know about this, check it is also remote
+            # TODO: sync titles?
+            # TODO: what if the remote issue is missing?
+            remote_status = remote_issues[number]['status']
+            new_line = '%s %s (%s)' % (symbol_for(remote_status), title, number)
+
+        new_file_content.append(new_line)
+
+    with open(filepath, 'w') as f:
+        for line in new_file_content:
+            f.write(line)
+            f.write('\n')
 
 
 if __name__ == '__main__':
