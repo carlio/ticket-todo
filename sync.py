@@ -100,6 +100,8 @@ def sync(*args):
         Adaptor = BitBucketAdaptor
     elif host == 'github':
         Adaptor = GitHubAdaptor
+    else:
+        raise ValueError(host)
 
     api = Adaptor(username, password, repo)
 
