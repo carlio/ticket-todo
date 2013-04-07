@@ -76,7 +76,7 @@ def parse_issue(line):
         subject = match.group(1)
         ticket_number = int(match.group(2))
     else:
-      subject = remainder
+      subject = remainder.strip()
       ticket_number = None
 
     return status, subject, ticket_number
