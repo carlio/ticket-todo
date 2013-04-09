@@ -23,6 +23,7 @@ package_info = {
     'version'          : _version,
     'packages'         : _packages,
     'install_requires' : _install_requires,
+    'scripts'          : ( 'scripts/sync_tickets', ),
 }
 
 setup(**package_info)
