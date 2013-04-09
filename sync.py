@@ -30,11 +30,18 @@ class BitBucketAdaptor(object):
 
     def get_issues(self):
         # TODO: error handling and request failure handling etc
-        issues = Issue(self.bitbucket).all()[1]['issues']
+        offset = 0
+        limit = 50
         to_ret = {}
-        for issue in issues:
-            to_ret[issue['local_id']] = {'title': issue['title'],
-                                         'status': self.from_status(issue['status'])}
+
+        while True:
+            issues = Issue(self.bitbucket).all(params={'start': offset, 'limit': limit})[1]['issues']
+            if len(issues) == 0:
+                break
+            offset += limit
+            for issue in issues:
+                to_ret[int(issue['local_id'])] = {'title': issue['title'],
+                                                  'status': self.from_status(issue['status'])}
         return to_ret
 
     def create_issue(self, title, status):
@@ -76,8 +83,10 @@ def parse_issue(line):
         subject = match.group(1)
         ticket_number = int(match.group(2))
     else:
-      subject = remainder.strip()
-      ticket_number = None
+        subject = remainder.strip()
+        ticket_number = None
+
+    print 'Found issue #%s - %s' % (ticket_number or '?', subject)
 
     return status, subject, ticket_number
 
@@ -106,6 +115,7 @@ def sync(*args):
     api = Adaptor(username, password, repo)
 
     remote_issues = api.get_issues()
+    print remote_issues.keys()
 
     with open(filepath) as f:
         file_content = f.readlines()
