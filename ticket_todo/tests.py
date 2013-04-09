@@ -1,4 +1,4 @@
-from sync import parse_issue
+from .parse import parse_issue
 from unittest import TestCase
 
 class TestIssueParsing(TestCase):
