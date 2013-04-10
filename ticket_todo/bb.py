@@ -45,3 +45,12 @@ class BitBucketAdaptor(object):
         data = Issue(self.bitbucket).create(title=title, status=status)[1]
         return data['local_id']
 
+    def update_issue(self, number, title, status):
+        if status == 'complete':
+            status = 'resolved'
+        elif status == 'pending':
+            status = 'new'
+        elif status == 'in progress':
+            status = 'open'
+        Issue(self.bitbucket).update(number, title=title, status=status)
+

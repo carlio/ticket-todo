@@ -19,7 +19,6 @@ def sync(*args):
     api = Adaptor(username, password, repo)
 
     remote_issues = api.get_issues()
-    print remote_issues.keys()
 
     with open(filepath) as f:
         file_content = f.readlines()
@@ -45,7 +44,13 @@ def sync(*args):
             # TODO: sync titles?
             # TODO: what if the remote issue is missing?
             remote_status = remote_issues[number]['status']
-            new_line = '%s %s (%s)' % (symbol_for(remote_status), title, number)
+
+            # if the status has changed, update remote
+            if remote_status != status:
+                print '%s -> %s' % (remote_status, status)
+                api.update_issue(number, title, status)
+
+            new_line = '%s %s (%s)' % (symbol_for(status), title, number)
 
         new_file_content.append(new_line)
 
