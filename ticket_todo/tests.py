@@ -1,4 +1,4 @@
-from .parse import parse_issue
+from .parse import parse_issue, parse_issues
 from unittest import TestCase
 
 class TestIssueParsing(TestCase):
@@ -21,6 +21,23 @@ class TestIssueParsing(TestCase):
         self.assertEqual('pending', status)
         self.assertEqual('and this', title)
         self.assertIsNone(number)
+
+    def test_abandoned(self):
+        status, title, number = parse_issue("! I decided not to do this (41)")
+        self.assertEqual('abandoned', status)
+        self.assertEqual('I decided not to do this', title)
+        self.assertEqual(41, number)
+
+    def test_comments_and_empty_lines(self):
+        issues = """+ I did this one (451)
+; this is a comment
+
+; this is also a comment
+- Working on this one
+""".split('\n')
+        issues = [issue for issue in parse_issues(issues)]
+        self.assertEqual(2, len(issues))
+
 
     def test_hanging_parenthesis(self):
         _, title, number = parse_issue("  some title with a random extra (bracket")
