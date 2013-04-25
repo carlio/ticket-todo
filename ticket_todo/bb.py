@@ -56,7 +56,7 @@ class BitBucketAdaptor(object):
             status = 'new'
         elif status == 'in progress':
             status = 'open'
-        elif status == 'wont fix'
+        elif status == 'wont fix':
             status = 'abandoned'
         Issue(self.bitbucket).update(number, title=title, status=status)
 
