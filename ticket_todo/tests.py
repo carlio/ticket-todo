@@ -33,10 +33,9 @@ class TestIssueParsing(TestCase):
 ; this is a comment
 
 ; this is also a comment
-- Working on this one
-""".split('\n')
+- Working on this one""".split('\n')
         issues = [issue for issue in parse_issues(issues)]
-        self.assertEqual(2, len(issues))
+        self.assertEqual(5, len(issues))
 
 
     def test_hanging_parenthesis(self):

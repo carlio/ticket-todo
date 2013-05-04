@@ -25,7 +25,13 @@ def sync(*args):
 
     new_file_content = []
 
-    for status, title, number in parse_issues(file_content):
+    for is_issue, line in parse_issues(file_content):
+        if not is_issue:
+            new_file_content.append(line)
+            continue
+
+        status, title, number = line
+
         if number is None:
             # locally, we think this is new
             # first, check the title in case it somehow ended up on remote

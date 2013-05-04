@@ -13,11 +13,10 @@ STATUS = {
 
 def parse_issues(lines):
     for line in lines:
-        if line.strip() == '':
+        if line.strip() == '' or line.startswith(';'):
+            yield(False, line)
             continue
-        if line.startswith(';'):
-            continue
-        yield(parse_issue(line))
+        yield(True, parse_issue(line))
 
 
 def parse_issue(line):
