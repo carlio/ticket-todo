@@ -2,13 +2,12 @@ from .parse import parse_issues, symbol_for
 from .bb import BitBucketAdaptor
 from .gh import GitHubAdaptor
 
+
 def sync(*args):
     # for now, use positional arguments (argparse etc to come later)
-    # ./sync.py /path/to/file repo username password host
-    # ./sync.py /home/carl/ticket-todo-tickets ticket-todo carlio myawesomepassword github
     # TODO: argparse
     # TODO: better error handling
-    filepath, repo, username, password, host = args[1:]
+    filepath, host, username, repo = args[1:]
     if host == 'bitbucket':
         Adaptor = BitBucketAdaptor
     elif host == 'github':
@@ -16,7 +15,7 @@ def sync(*args):
     else:
         raise ValueError(host)
 
-    api = Adaptor(username, password, repo)
+    api = Adaptor(username, repo)
 
     remote_issues = api.get_issues()
 

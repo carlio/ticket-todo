@@ -1,5 +1,5 @@
 #!/usr/bin/env python
 import sys
-from ticket_todo.sync import sync
+from womble.sync import sync
 
 sync(*sys.argv)
