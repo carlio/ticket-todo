@@ -48,11 +48,11 @@ def sync(*args):
             # we already know about this, check it is also remote
             # TODO: sync titles?
             # TODO: what if the remote issue is missing?
-            remote_status = remote_issues[number]['status']
+            issue = remote_issues[number]
 
             # if the status has changed, update remote
-            if remote_status != status:
-                print '%s -> %s' % (remote_status, status)
+            if issue['status'] != status or issue['title'] != title:
+                print '%s -> %s  ::  %s -> %s' % (issue['status'], status, issue['title'], title)
                 api.update_issue(number, title, status)
 
             new_line = '%s %s (%s)' % (symbol_for(status), title, number)

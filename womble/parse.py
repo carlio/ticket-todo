@@ -10,7 +10,6 @@ STATUS = {
 }
 
 
-
 def parse_issues(lines):
     for line in lines:
         if line.strip() == '' or line.startswith(';'):
