@@ -6,7 +6,7 @@ STATUS = {
   '+': 'complete',
   '-': 'in progress',
   ' ': 'pending',
-  '!': 'abandoned',
+  '!': 'wontfix',
 }
 
 
@@ -14,7 +14,7 @@ STATUS = {
 def parse_issues(lines):
     for line in lines:
         if line.strip() == '' or line.startswith(';'):
-            yield(False, line)
+            yield(False, line.strip())
             continue
         yield(True, parse_issue(line))
 

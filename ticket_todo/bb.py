@@ -16,8 +16,8 @@ class BitBucketAdaptor(object):
             return 'pending'
         elif status == 'open':
             return 'in progress'
-        elif status == 'abandoned':
-            return 'wont fix'
+        elif status == 'wontfix':
+            return 'wontfix'
         # TODO: handle all returned values
         raise ValueError(status)
 
@@ -44,8 +44,8 @@ class BitBucketAdaptor(object):
             status = 'new'
         elif status == 'in progress':
             status = 'open'
-        elif status == 'wont fix':
-            status = 'abandoned'
+        elif status == 'wontfix':
+            status = 'wontfix'
         data = Issue(self.bitbucket).create(title=title, status=status)[1]
         return data['local_id']
 
@@ -56,7 +56,7 @@ class BitBucketAdaptor(object):
             status = 'new'
         elif status == 'in progress':
             status = 'open'
-        elif status == 'wont fix':
-            status = 'abandoned'
+        elif status == 'wontfix':
+            status = 'wontfix'
         Issue(self.bitbucket).update(number, title=title, status=status)
 
