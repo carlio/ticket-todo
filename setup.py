@@ -6,7 +6,7 @@ import time
 
 
 _version = "0.1.%sdev" % int(time.time())
-_packages = find_packages('ticket_todo', exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
+_packages = find_packages('womble', exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
 
 
 def _strip_comments(line):
@@ -19,7 +19,7 @@ with open( os.path.join( os.path.dirname(__file__), 'requirements.txt' ) ) as f:
 
 
 package_info = {
-    'name'             : 'ticket_todo',
+    'name'             : 'ticket_womble',
     'version'          : _version,
     'packages'         : _packages,
     'install_requires' : _install_requires,
